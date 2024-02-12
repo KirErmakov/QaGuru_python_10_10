@@ -44,3 +44,18 @@ student = User(
     state='NCR',
     city='Delhi'
 )
+
+
+@dataclass
+class SimpleUser:
+    full_name: str
+    email: str
+    current_address: str
+    permanent_address: str
+
+
+person = SimpleUser(
+    full_name='John Wick',
+    email='jwick@gmail.com',
+    current_address='121 Mill Neck, Long Island, NY',
+    permanent_address='121 Mill Neck, Long Island, NY')

@@ -1,8 +1,8 @@
 from selene import browser, command, have, be
 from selene.support.shared.jquery_style import s
 from selenium.webdriver import Keys
-from demoqa_tests import resource
-from demoqa_tests.data.users import User
+from tests.resources import resource
+from tests.users import User
 
 
 class RegistrationPage:
@@ -26,6 +26,7 @@ class RegistrationPage:
         browser.all('[id^=google_ads][id$=container__]').with_(timeout=10).should(
             have.size_greater_than_or_equal(3))
         browser.all('[id^=google_ads][id$=container__]').perform(command.js.remove)
+        browser.element('[aria-label="Consent"]').click()
 
     def fill_first_name(self, user: User):
         self.first_name.should(be.blank).type(user.first_name)

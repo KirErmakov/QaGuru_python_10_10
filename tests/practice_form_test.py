@@ -1,5 +1,5 @@
 from tests import users
-from tests.registration_page import RegistrationPage
+from tests.registration_page import  RegistrationPage
 
 
 def test_user_registration_form_high_level():

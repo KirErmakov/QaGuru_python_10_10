@@ -23,10 +23,11 @@ class RegistrationPage:
 
     def open(self):
         browser.open('/automation-practice-form')
+        browser.element('[aria-label="Consent"]').click()
         browser.all('[id^=google_ads][id$=container__]').with_(timeout=10).should(
             have.size_greater_than_or_equal(3))
         browser.all('[id^=google_ads][id$=container__]').perform(command.js.remove)
-        browser.element('[aria-label="Consent"]').click()
+
 
     def fill_first_name(self, user: User):
         self.first_name.should(be.blank).type(user.first_name)

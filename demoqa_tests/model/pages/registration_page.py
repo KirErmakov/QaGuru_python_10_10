@@ -21,8 +21,11 @@ class RegistrationPage:
         self.city_dropdown = browser.all('[id^=react-select][id*=option]')
         self.submit_button = s('#submit')
 
-    def open(self):
+    @staticmethod
+    def open():
         browser.open('/automation-practice-form')
+        browser.element('[aria-label="Consent"]').click()
+        browser.execute_script('document.querySelector(".body-height").style.transform = "scale(.5)"')
         browser.all('[id^=google_ads][id$=container__]').with_(timeout=10).should(
             have.size_greater_than_or_equal(3))
         browser.all('[id^=google_ads][id$=container__]').perform(command.js.remove)
@@ -95,9 +98,8 @@ class RegistrationPage:
             .select_city(user) \
             .submit()
 
-
-
-    def should_register_user_with(self, user: User):
+    @staticmethod
+    def should_register_user_with(user: User):
         browser.element('#example-modal-sizes-title-lg').should(have.exact_text('Thanks for submitting the form'))
         browser.element('.table').all('td').even.should(
             have.texts(

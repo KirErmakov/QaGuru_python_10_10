@@ -21,18 +21,19 @@ class RegistrationPage:
         self.city_dropdown = browser.all('[id^=react-select][id*=option]')
         self.submit_button = s('#submit')
 
-    def open(self):
+    @staticmethod
+    def open():
         browser.open('/automation-practice-form')
         browser.all('[id^=google_ads][id$=container__]').with_(timeout=10).should(
             have.size_greater_than_or_equal(3))
         browser.all('[id^=google_ads][id$=container__]').perform(command.js.remove)
 
     def fill_first_name(self, user: User):
-        self.first_name.should(be.blank).type(user.first_name)
+        self.first_name.type(user.first_name)
         return self
 
     def fill_last_name(self, user: User):
-        self.last_name.should(be.blank).type(user.last_name)
+        self.last_name.type(user.last_name)
         return self
 
     def fill_date_of_birth(self, user: User):
@@ -40,7 +41,7 @@ class RegistrationPage:
         return self
 
     def fill_email(self, user: User):
-        self.email.should(be.blank).type(user.email)
+        self.email.type(user.email)
         return self
 
     def select_gender(self, user: User):
@@ -52,11 +53,13 @@ class RegistrationPage:
         return self
 
     def fill_subject(self, user: User):
-        self.subject.type(user.subjects).press_enter()
+        for subject in user.subjects:
+            self.subject.type(subject).press_enter()
         return self
 
     def select_hobby(self, user: User):
-        self.hobby.element_by(have.exact_text(user.hobbies.value)).click()
+        for hobby in user.hobbies:
+            self.hobby.element_by(have.exact_text(hobby.name)).click()
         return self
 
     def upload_picture(self, user: User):
@@ -95,21 +98,20 @@ class RegistrationPage:
             .select_city(user) \
             .submit()
 
-
-
-    def should_register_user_with(self, user: User):
+    @staticmethod
+    def should_register_user_with(user: User):
         browser.element('#example-modal-sizes-title-lg').should(have.exact_text('Thanks for submitting the form'))
         browser.element('.table').all('td').even.should(
             have.texts(
                 f'{user.first_name} {user.last_name}',
-                {user.email},
-                {user.gender.value},
-                {user.mobile_num},
-                {user.date_of_birth},
-                {user.subjects},
-                {user.hobbies.value},
-                {user.photo},
-                {user.current_address},
+                user.email,
+                user.gender.value,
+                user.mobile_num,
+                user.date_of_birth,
+                ', '.join(user.subjects),
+                ', '.join([hobby.name for hobby in user.hobbies]),
+                user.photo,
+                user.current_address,
                 f'{user.state} {user.city}'
             )
         )
